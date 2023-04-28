@@ -88,7 +88,12 @@ func init_scheduler() error {
 
 	SCHEDULER.Add(&tasks.Task{
 		Interval: time.Duration(1 * time.Second),
-		TaskFunc: ticker("a 1 sec ticker"),
+		TaskFunc: ticker(), // a 1 sec ticker
+	})
+
+	SCHEDULER.Add(&tasks.Task{
+		Interval: time.Duration(time.Hour * 24),
+		TaskFunc: GameSrvCleanUp(time.Hour * 24 * 30), // every month
 	})
 
 	return nil
@@ -96,7 +101,7 @@ func init_scheduler() error {
 }
 
 // TODO, we should be able to add parameters to the function to exec w/o closures
-func ticker(s string) func() error {
+func ticker() func() error {
 
 	return func() error {
 

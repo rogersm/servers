@@ -74,3 +74,28 @@ func (s *GameServer) CheckInput() (err error) {
 
 	return err
 }
+
+// remove all the servers that have not updated their state before olderthan duration
+func GameSrvCleanUp(olderthan time.Duration) func() error {
+
+	return func() error {
+		var ServersToBeRemoved []string
+
+		GatherServersToBeRemoved := func(key string, server *GameServer) bool {
+
+			if server.LastPing.Before(time.Now().Add(-olderthan)) {
+				ServersToBeRemoved = append(ServersToBeRemoved, server.Key())
+			}
+
+			return true
+		}
+
+		GAMESRV.Range(GatherServersToBeRemoved)
+
+		for _, key := range ServersToBeRemoved {
+			GAMESRV.Delete(key)
+		}
+
+		return nil
+	}
+}
