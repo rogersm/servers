@@ -4,6 +4,7 @@ import (
 	"bytes"
 	_ "embed"
 	"flag"
+	"lobby/ipfilter"
 	"log"
 	"os"
 	"os/signal"
@@ -33,7 +34,7 @@ var (
 )
 
 const (
-	VERSION   = "3.1.2"
+	VERSION   = "3.1.3"
 	STRINGVER = "fujinet lobby " + VERSION + "/" + runtime.GOOS + " (c) Roger Sen 2023"
 )
 
@@ -63,17 +64,20 @@ func main() {
 	}
 
 	init_html(srvaddr)
+	ipfilter.Init()
 
 	router := gin.Default()
 
+	router.Use(ipfilter.BlockIP())
 	router.GET("/", ShowMain)
 	router.GET("/viewFull", ShowServers)
 	router.GET("/view", ShowServersMinimised)
 	router.GET("/version", ShowStatus)
 	router.POST("/server", UpsertServer)
 
-	router.Run(srvaddr)
+	router.NoRoute(ipfilter.BanIfNeeded)
 
+	router.Run(srvaddr)
 }
 
 /*
