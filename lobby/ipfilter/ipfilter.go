@@ -104,7 +104,6 @@ func contains(slice []string, item string) bool {
 func BanIfNeeded(c *gin.Context) {
 	if beginsWith(_BANNED_BEGINS, c.Request.URL.Path) ||
 		contains(_BANNED_STRINGS, c.Request.URL.Path) ||
-		c.Request.Method == "" || // Method == "" -> Method = "GET"
 		!contains([]string{"GET", "POST"}, c.Request.Method) { // TODO: test "", "GET", "POST"
 
 		_IPFILTER.Store(binary.BigEndian.Uint32([]byte(c.ClientIP())), _EXISTS)
