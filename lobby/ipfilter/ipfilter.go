@@ -101,6 +101,7 @@ func contains(slice []string, item string) bool {
 	return false
 }
 
+// Add the ip to the _IPFILTER hash if meets any of the banning rules defined
 func BanIfNeeded(c *gin.Context) {
 	if beginsWith(_BANNED_BEGINS, c.Request.URL.Path) ||
 		contains(_BANNED_STRINGS, c.Request.URL.Path) ||
