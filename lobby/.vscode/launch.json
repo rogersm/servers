@@ -10,7 +10,7 @@
             "request": "launch",
             "mode": "debug",
             "program": "${workspaceRoot}",
-            "args": ["-srvaddr", ":8080"],
+            "args": ["-srvaddr", "localhost:8080"],
         }
     ]
 }
