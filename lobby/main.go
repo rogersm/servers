@@ -53,7 +53,7 @@ func main() {
 	var srvaddr string
 	var help bool
 
-	flag.StringVar(&srvaddr, "srvaddr", ":8080", "<address:port> for http server")
+	flag.StringVar(&srvaddr, "srvaddr", "localhost:8080", "<address:port> for http server")
 	flag.BoolVar(&help, "help", false, "show this help")
 
 	flag.Parse()
